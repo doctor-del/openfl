@@ -849,7 +849,9 @@ class DisplayObjectContainer extends InteractiveObject
 
 				if (hitTest)
 				{
-					stack.insert(length, hitObject);
+					if (mouseEnabled) { // KMD
+						stack.insert(length, hitObject);
+					}
 					return true;
 				}
 			}
