@@ -418,7 +418,7 @@ class Tools
 					name = className.substr(lastIndexOfPeriod + 1);
 				}
 
-				// name = formatClassName(name, prefix);
+				name = formatClassName(name, prefix);
 
 				var classProperties = [];
 				var objectReferences = new Map<String, Bool>();
@@ -473,7 +473,7 @@ class Tools
 											}
 											else
 											{
-												// className = formatClassName(className, prefix);
+												className = formatClassName(className, prefix);
 											}
 
 											if (className != null)
