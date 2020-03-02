@@ -30,6 +30,12 @@ class Context3DShape
 
 		if (graphics != null)
 		{
+			#if farm_new_batching
+			if (renderer.batcher != null) {
+				renderer.batcher.flush();
+			}
+			#end
+
 			renderer.__setBlendMode(shape.__worldBlendMode);
 			renderer.__pushMaskObject(shape);
 			// renderer.filterManager.pushObject (shape);
@@ -75,6 +81,12 @@ class Context3DShape
 
 		if (graphics != null)
 		{
+			#if farm_new_batching
+			if (renderer.batcher != null) {
+				renderer.batcher.flush();
+			}
+			#end
+
 			// TODO: Support invisible shapes
 
 			Context3DGraphics.renderMask(graphics, renderer);

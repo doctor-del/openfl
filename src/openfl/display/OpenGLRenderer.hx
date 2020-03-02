@@ -14,6 +14,9 @@ import lime.graphics.opengl.ext.KHR_debug;
 import lime.graphics.WebGLRenderContext;
 import lime.math.Matrix4;
 #end
+#if farm_new_batching
+import batcher.BatchRenderer;
+#end
 
 /**
 	**BETA**
@@ -94,6 +97,10 @@ class OpenGLRenderer extends DisplayObjectRenderer
 	@:noCompletion private var __values:Array<Float>;
 	@:noCompletion private var __width:Int;
 
+	#if farm_new_batching
+	public var batcher:BatchRenderer;
+	#end
+
 	@:noCompletion private function new(context:Context3D, defaultRenderTarget:BitmapData = null)
 	{
 		super();
@@ -153,6 +160,13 @@ class OpenGLRenderer extends DisplayObjectRenderer
 		__defaultDisplayShader = new DisplayObjectShader();
 		__defaultGraphicsShader = new GraphicsShader();
 		__defaultShader = __defaultDisplayShader;
+
+		#if farm_new_batching
+		if (defaultRenderTarget == null) {
+			// this is main renderer and we add batcher to it
+			batcher = new BatchRenderer(context, 4096);
+		}
+		#end
 
 		__initShader(__defaultShader);
 
@@ -752,7 +766,20 @@ class OpenGLRenderer extends DisplayObjectRenderer
 
 			__upscaled = (__worldTransform.a != 1 || __worldTransform.d != 1);
 
+			#if farm_new_batching
+			// setup projection matrix for the batcher as it's an uniform value for all the draw calls
+			batcher.projectionMatrix = __projectionFlipped;
+			// also pass the viewport to the batcher because it uses it for the out-of-screen quad culling
+			// TOOD: we're not using renderer culling for now
+			batcher.setViewport(__offsetX, __offsetY, __displayWidth, __displayHeight);
+			#end
+
 			object.__renderGL(this);
+
+			#if farm_new_batching
+			// flush whatever is left in the batch to render
+			batcher.flush();
+			#end
 
 			// TODO: Handle this in Context3D as a viewport?
 

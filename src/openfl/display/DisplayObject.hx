@@ -2101,6 +2101,15 @@ class DisplayObject extends EventDispatcher implements IBitmapDrawable #if (open
 
 			if (updateTransform || needRender)
 			{
+				#if farm_new_batching
+				if (cacheAsBitmap && renderType == OPENGL) {
+					var o_renderer = cast(renderer, OpenGLRenderer);
+					if (o_renderer.batcher != null) {
+						// flush whatever is left in the batch to render before default rendering
+						o_renderer.batcher.flush();
+					}
+				}
+				#end
 				rect = Rectangle.__pool.get();
 
 				__getFilterBounds(rect, __cacheBitmapMatrix);

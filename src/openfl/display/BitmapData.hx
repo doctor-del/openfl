@@ -3405,6 +3405,12 @@ class BitmapData implements IBitmapDrawable
 
 	@:noCompletion private function __renderGL(renderer:OpenGLRenderer):Void
 	{
+		#if farm_new_batching
+		if (renderer.batcher != null) {
+			renderer.batcher.flush();
+		}
+		#end
+
 		var context = renderer.__context3D;
 		var gl = context.gl;
 
@@ -3435,6 +3441,12 @@ class BitmapData implements IBitmapDrawable
 
 	@:noCompletion private function __renderGLMask(renderer:OpenGLRenderer):Void
 	{
+		#if farm_new_batching
+		if (renderer.batcher != null) {
+			renderer.batcher.flush();
+		}
+		#end
+
 		var context = renderer.__context3D;
 		var gl = context.gl;
 

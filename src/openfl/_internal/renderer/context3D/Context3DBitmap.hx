@@ -27,6 +27,12 @@ class Context3DBitmap
 
 		if (bitmap.__bitmapData != null && bitmap.__bitmapData.__isValid)
 		{
+			#if farm_new_batching
+			if (renderer.batcher != null) {
+				renderer.batcher.flush();
+			}
+			#end
+
 			var context = renderer.__context3D;
 
 			renderer.__setBlendMode(bitmap.__worldBlendMode);
@@ -62,6 +68,12 @@ class Context3DBitmap
 	{
 		if (bitmap.__bitmapData != null && bitmap.__bitmapData.__isValid)
 		{
+			#if farm_new_batching
+			if (renderer.batcher != null) {
+				renderer.batcher.flush();
+			}
+			#end
+
 			var context = renderer.__context3D;
 
 			var shader = renderer.__maskShader;

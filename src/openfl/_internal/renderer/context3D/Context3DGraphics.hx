@@ -569,6 +569,12 @@ class Context3DGraphics
 						case DRAW_QUADS:
 							if (bitmap != null)
 							{
+								#if farm_new_batching
+								if (renderer.batcher != null) {
+									renderer.batcher.flush();
+								}
+								#end
+
 								var c = data.readDrawQuads();
 								var rects = c.rects;
 								var indices = c.indices;
@@ -641,6 +647,12 @@ class Context3DGraphics
 						case DRAW_RECT:
 							if (fill != null)
 							{
+								#if farm_new_batching
+								if (renderer.batcher != null) {
+									renderer.batcher.flush();
+								}
+								#end
+								
 								var c = data.readDrawRect();
 								var x = c.x;
 								var y = c.y;
