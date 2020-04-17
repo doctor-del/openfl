@@ -16,6 +16,7 @@ import lime.math.Matrix4;
 #end
 #if farm_new_batching
 import batcher.BatchRenderer;
+import lime.utils.Float32Array;
 #end
 
 /**
@@ -1036,6 +1037,44 @@ class OpenGLRenderer extends DisplayObjectRenderer
 			__currentShader.__updateFromBuffer(__currentShaderBuffer, bufferOffset);
 		}
 	}
+
+	#if farm_new_batching
+	/**
+	 * TODO: move this helper methods to base class then we'll use a single one instead of old code
+	 */
+
+	public inline function __fillTransformedVertexCoords(transform:Matrix, vertexData:Float32Array, x:Float, y:Float, w:Float, h:Float) {
+		var x1 = x + w;
+		var y1 = y + h;
+		
+		vertexData[0] = transform.__transformX(x, y);
+		vertexData[1] = transform.__transformY(x, y);
+		
+		vertexData[2] = transform.__transformX(x1, y);
+		vertexData[3] = transform.__transformY(x1, y);
+		
+		vertexData[4] = transform.__transformX(x1, y1);
+		vertexData[5] = transform.__transformY(x1, y1);
+		
+		vertexData[6] = transform.__transformX(x, y1);
+		vertexData[7] = transform.__transformY(x, y1);
+	}
+
+	static var getMatrixHelperMatrix = new Matrix();
+	
+	public function getDisplayTransformTempMatrix(transform:Matrix, snapToPixel:Bool):Matrix {
+		var matrix = getMatrixHelperMatrix;
+		matrix.copyFrom(transform);
+		matrix.concat(__stage.__displayMatrix);
+
+		if (snapToPixel) {
+			matrix.tx = Math.round(matrix.tx);
+			matrix.ty = Math.round(matrix.ty);
+		}
+		
+		return matrix;
+	}
+	#end
 }
 #else
 typedef OpenGLRenderer = Dynamic;
