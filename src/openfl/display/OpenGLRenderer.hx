@@ -602,6 +602,10 @@ class OpenGLRenderer extends DisplayObjectRenderer
 	@:noCompletion private override function __popMask():Void
 	{
 		if (__stencilReference == 0) return;
+		#if farm_new_batching
+		// flush whatever is left in the batch to render
+		batcher.flush();
+		#end
 
 		var mask = __maskObjects.pop();
 
@@ -666,6 +670,10 @@ class OpenGLRenderer extends DisplayObjectRenderer
 
 	@:noCompletion private override function __pushMask(mask:DisplayObject):Void
 	{
+		#if farm_new_batching
+		// flush whatever is left in the batch to render
+		batcher.flush();
+		#end
 		if (__stencilReference == 0)
 		{
 			__context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.STENCIL);
