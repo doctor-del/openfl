@@ -604,7 +604,9 @@ class OpenGLRenderer extends DisplayObjectRenderer
 		if (__stencilReference == 0) return;
 		#if farm_new_batching
 		// flush whatever is left in the batch to render
-		batcher.flush();
+		if (batcher != null) {
+			batcher.flush();
+		}
 		#end
 
 		var mask = __maskObjects.pop();
@@ -672,7 +674,9 @@ class OpenGLRenderer extends DisplayObjectRenderer
 	{
 		#if farm_new_batching
 		// flush whatever is left in the batch to render
-		batcher.flush();
+		if (batcher != null) {
+			batcher.flush();
+		}
 		#end
 		if (__stencilReference == 0)
 		{
