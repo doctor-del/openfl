@@ -236,7 +236,7 @@ import openfl._internal.Lib;
 
 							  `openfl.system.Security.allowDomain(_sourceDomain_)`
 	**/
-	public static function call(functionName:String, p1:Dynamic = null, p2:Dynamic = null, p3:Dynamic = null, p4:Dynamic = null, p5:Dynamic = null):Dynamic
+	public static function call(functionName:String, p1:Dynamic = null, p2:Dynamic = null, p3:Dynamic = null, p4:Dynamic = null, p5:Dynamic = null, p6:Dynamic = null, p7:Dynamic = null):Dynamic
 	{
 		#if (js && html5)
 		var callResponse:Dynamic = null;
@@ -287,9 +287,17 @@ import openfl._internal.Lib;
 		{
 			callResponse = fn(p1, p2, p3, p4);
 		}
-		else
+		else if (p6 == null)
 		{
 			callResponse = fn(p1, p2, p3, p4, p5);
+		}
+		else if (p7 == null)
+		{
+			callResponse = fn(p1, p2, p3, p4, p5, p6);
+		}
+		else
+		{
+			callResponse = fn(p1, p2, p3, p4, p5, p6, p7);
 		}
 
 		return callResponse;
